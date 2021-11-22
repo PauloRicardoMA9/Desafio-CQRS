@@ -1,11 +1,9 @@
 ﻿using CQRS.Core.DomainObjects;
-using System;
 
 namespace CQRS.Cadastro.Domain.Objects
 {
     public class Cliente : Entidade, IAggregateRoot
     {
-        public Guid ContatoId { get; private set; }
         public string Nome { get; private set; }
         public string Sobrenome { get; private set; }
         public string Cpf { get; private set; }
@@ -53,7 +51,6 @@ namespace CQRS.Cadastro.Domain.Objects
         public void AlterarContato(Contato contato)
         {
             Contato = contato;
-            ContatoId = contato.Id;
         }
 
         public void Validar()
