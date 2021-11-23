@@ -1,3 +1,4 @@
+using CQRS.Cadastro.Application.AutoMapper;
 using CQRS.WebApp.MVC.Setup;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,6 +21,7 @@ namespace CQRS.WebApp.MVC
         {
             services.AddControllers();
             services.AddContexts(Configuration);
+            services.AddAutoMapper(typeof(DomainToViewModelMappingProfile), typeof(ViewModelToDomainMappingProfile));
             services.ResolverDependencias();
         }
 

@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CQRS.Cadastro.Data", "src\C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQRS.WebApp.MVC", "src\CQRS.WebApp.MVC\CQRS.WebApp.MVC.csproj", "{5C552A5A-BD22-4CCA-A0C8-1D3D5C2FE602}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQRS.Cadastro.Application", "src\CQRS.Cadastro.Application\CQRS.Cadastro.Application.csproj", "{DE76A771-9912-47D3-9FE8-BC90A59ACA47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{5C552A5A-BD22-4CCA-A0C8-1D3D5C2FE602}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C552A5A-BD22-4CCA-A0C8-1D3D5C2FE602}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C552A5A-BD22-4CCA-A0C8-1D3D5C2FE602}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE76A771-9912-47D3-9FE8-BC90A59ACA47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE76A771-9912-47D3-9FE8-BC90A59ACA47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE76A771-9912-47D3-9FE8-BC90A59ACA47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE76A771-9912-47D3-9FE8-BC90A59ACA47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +58,7 @@ Global
 		{6EE80560-F064-469A-9064-3F0C9D315B45} = {F7BA6197-AA68-4411-BCDE-3C8863AAE9BE}
 		{DF440A28-7FBE-4541-869A-2619C63A3E63} = {0BC11187-AD67-4DBD-BD80-4A06F9762815}
 		{5C552A5A-BD22-4CCA-A0C8-1D3D5C2FE602} = {9AFBDD2C-A10E-4938-A861-0E77C251BEC1}
+		{DE76A771-9912-47D3-9FE8-BC90A59ACA47} = {0BC11187-AD67-4DBD-BD80-4A06F9762815}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B5CEE90F-8890-405F-9F9B-B405DDC1BC47}
