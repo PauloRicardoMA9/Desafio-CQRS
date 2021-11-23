@@ -22,7 +22,7 @@ namespace CQRS.Cadastro.Data.Mappings
                 .IsRequired()
                 .HasColumnType("varchar(100)");
 
-            builder.ToTable("Clientes");
+            builder.ToTable("Contatos");
         }
     }
 }
