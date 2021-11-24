@@ -1,4 +1,5 @@
 ﻿using CQRS.Core.DomainObjects;
+using DocumentValidator;
 
 namespace CQRS.Cadastro.Domain.Objects
 {
@@ -37,8 +38,7 @@ namespace CQRS.Cadastro.Domain.Objects
 
         public void AlterarCpf(string cpf)
         {
-            Validacoes.ValidarSeNaoVazio(cpf, "O campo CPF não pode estar vazio.");
-            Validacoes.ValidarTamanho(cpf, 11, 11, "O campo CPF deve conter 11 dígitos.");
+            Validacoes.ValidarSeIgual(true, CpfValidation.Validate(cpf), "CPF inválido");
             Cpf = cpf;
         }
 
@@ -57,8 +57,7 @@ namespace CQRS.Cadastro.Domain.Objects
         {
             Validacoes.ValidarSeNaoVazio(Nome, "O campo Nome não pode estar vazio.");
             Validacoes.ValidarSeNaoVazio(Sobrenome, "O campo Sobrenome não pode estar vazio.");
-            Validacoes.ValidarSeNaoVazio(Cpf, "O campo CPF não pode estar vazio.");
-            Validacoes.ValidarTamanho(Cpf, 11, 11, "O campo CPF deve conter 11 dígitos.");
+            Validacoes.ValidarSeIgual(true, CpfValidation.Validate(Cpf), "CPF inválido");
             Validacoes.ValidarSeNaoNulo(Sexo, "O campo Sexo não pode ser nulo.");
         }
     }

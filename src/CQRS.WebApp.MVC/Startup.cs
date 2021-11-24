@@ -1,5 +1,6 @@
 using CQRS.Cadastro.Application.AutoMapper;
 using CQRS.WebApp.MVC.Setup;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +23,7 @@ namespace CQRS.WebApp.MVC
             services.AddControllers();
             services.AddContexts(Configuration);
             services.AddAutoMapper(typeof(DomainToViewModelMappingProfile), typeof(ViewModelToDomainMappingProfile));
+            services.AddMediatR(typeof(Startup));
             services.ResolverDependencias();
         }
 

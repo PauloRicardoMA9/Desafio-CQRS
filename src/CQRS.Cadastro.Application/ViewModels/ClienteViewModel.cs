@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CQRS.Core.Extensions;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace CQRS.Cadastro.Application.ViewModels
@@ -16,13 +17,12 @@ namespace CQRS.Cadastro.Application.ViewModels
         [StringLength(30, ErrorMessage = "O campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = 2)]
         public string Sobrenome { get; set; }
 
-        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        [StringLength(11, ErrorMessage = "O campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = 11)]
+        [CpfValidation(ErrorMessage = "O campo {0} é inválido.")]
         public string Cpf { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         public int Sexo { get; set; }
 
-        public ContatoViewModel ContatoViewModel { get; set; }
+        public ContatoViewModel Contato { get; set; }
     }
 }

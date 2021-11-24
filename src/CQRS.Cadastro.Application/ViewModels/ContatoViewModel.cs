@@ -12,11 +12,11 @@ namespace CQRS.Cadastro.Application.ViewModels
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         [StringLength(2, ErrorMessage = "O campo {0} precisa ter {1} caracteres", MinimumLength = 2)]
-        public string Ddd { get; set; }
+        public int Ddd { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         [StringLength(9, ErrorMessage = "O campo {0} precisa ter {1} caracteres", MinimumLength = 9)]
-        public string Telefone { get; set; }
+        public int Telefone { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         [EmailAddress(ErrorMessage = "O email informado não é válido.")]
