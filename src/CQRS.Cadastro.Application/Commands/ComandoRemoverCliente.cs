@@ -10,6 +10,7 @@ namespace CQRS.Cadastro.Application.Commands
 
         public ComandoRemoverCliente(Guid clienteId)
         {
+            AggregateId = clienteId;
             ClienteId = clienteId;
         }
 

@@ -5,7 +5,7 @@ using System;
 
 namespace CQRS.Cadastro.Application.Commands
 {
-    public class ComandoAdicionarCliente : Comando
+    public class ComandoAtualizarCliente : Comando
     {
         public Guid ClienteId { get; private set; }
         public string Nome { get; private set; }
@@ -13,7 +13,7 @@ namespace CQRS.Cadastro.Application.Commands
         public string Cpf { get; private set; }
         public int Sexo { get; private set; }
 
-        public ComandoAdicionarCliente(Guid clienteId, string nome, string sobrenome, string cpf, int sexo)
+        public ComandoAtualizarCliente(Guid clienteId, string nome, string sobrenome, string cpf, int sexo)
         {
             AggregateId = clienteId;
             ClienteId = clienteId;
@@ -25,14 +25,14 @@ namespace CQRS.Cadastro.Application.Commands
 
         public override bool EhValido()
         {
-            ResultadoDaValidacao = new ValidacaoAdicionarCliente().Validate(this);
+            ResultadoDaValidacao = new ValidacaoAtualizarCliente().Validate(this);
             return ResultadoDaValidacao.IsValid;
         }
     }
 
-    public class ValidacaoAdicionarCliente : AbstractValidator<ComandoAdicionarCliente>
+    public class ValidacaoAtualizarCliente : AbstractValidator<ComandoAtualizarCliente>
     {
-        public ValidacaoAdicionarCliente()
+        public ValidacaoAtualizarCliente()
         {
             RuleFor(comando => comando.ClienteId)
                 .NotEqual(Guid.Empty)

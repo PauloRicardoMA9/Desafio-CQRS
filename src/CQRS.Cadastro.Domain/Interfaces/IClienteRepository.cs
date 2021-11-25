@@ -20,5 +20,7 @@ namespace CQRS.Cadastro.Domain.Interfaces
         public Contato ObterContatoPorClienteId(Expression<Func<Contato, bool>> predicate);
         public void RemoverCliente(Guid id);
         public void RemoverContato(Guid id);
+        public void AtualizarCliente(Cliente cliente);
+        public void AtualizarContato(Contato contato);
     }
 }

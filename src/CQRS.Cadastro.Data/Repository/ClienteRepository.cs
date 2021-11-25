@@ -78,6 +78,16 @@ namespace CQRS.Cadastro.Data.Repository
             _context.Contatos.Remove(contato);
         }
 
+        public void AtualizarCliente(Cliente cliente)
+        {
+            _context.Clientes.Update(cliente);
+        }
+
+        public void AtualizarContato(Contato contato)
+        {
+            _context.Contatos.Update(contato);
+        }
+
         public void Dispose()
         {
             _context?.Dispose();

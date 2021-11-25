@@ -30,7 +30,7 @@ namespace CQRS.Cadastro.Domain.Objects
             Ddd = ddd;
         }
 
-        public void AlterarNumero(int telefone)
+        public void AlterarTelefone(int telefone)
         {
             Validacoes.ValidarTamanho(telefone, 9, 9, "O campo Número deve conter 9 dígitos.");
             Telefone = telefone;

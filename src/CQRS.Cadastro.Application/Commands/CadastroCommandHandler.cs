@@ -1,10 +1,10 @@
-﻿using CQRS.Cadastro.Domain.Interfaces;
+﻿using CQRS.Cadastro.Application.Queries;
+using CQRS.Cadastro.Domain.Interfaces;
 using CQRS.Cadastro.Domain.Objects;
 using CQRS.Core.Communication.Mediator;
 using CQRS.Core.Messages;
 using CQRS.Core.Messages.CommonMessages.Notifications;
 using MediatR;
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,15 +14,21 @@ namespace CQRS.Cadastro.Application.Commands
     public class CadastroCommandHandler : IRequestHandler<ComandoAdicionarCliente, bool>,
                                           IRequestHandler<ComandoAdicionarContato, bool>,
                                           IRequestHandler<ComandoRemoverCliente, bool>,
-                                          IRequestHandler<ComandoRemoverContato, bool>
+                                          IRequestHandler<ComandoRemoverContato, bool>,
+                                          IRequestHandler<ComandoAtualizarCliente, bool>,
+                                          IRequestHandler<ComandoAtualizarContato, bool>
     {
+        private readonly ICadastroQueries _cadastroQueries;
         private readonly IClienteRepository _clienteRepository;
         private readonly IMediatorHandler _mediatorHandler;
 
-        public CadastroCommandHandler(IClienteRepository clienteRepository, IMediatorHandler mediatorHandler)
+        public CadastroCommandHandler(IClienteRepository clienteRepository,
+                                      IMediatorHandler mediatorHandler,
+                                      ICadastroQueries cadastroQueries)
         {
             _clienteRepository = clienteRepository;
             _mediatorHandler = mediatorHandler;
+            _cadastroQueries = cadastroQueries;
         }
 
         public async Task<bool> Handle(ComandoAdicionarCliente comando, CancellationToken cancellationToken)
@@ -86,15 +92,61 @@ namespace CQRS.Cadastro.Application.Commands
                 return false;
             }
 
-            var contatoCadastrado = _clienteRepository.BuscarContato(contato => contato.Id == comando.ContatoId).Result.Any();
+            var contato = await _cadastroQueries.ObterContatoPorClienteId(comando.ClienteId);
 
-            if (!contatoCadastrado)
+            if (contato == null)
             {
-                await _mediatorHandler.PublicarNotificacao(new NotificacaoDeDominio(comando.TipoDaMensagem, "Nenhum contato cadastrado com o id informado."));
                 return false;
             }
 
-            _clienteRepository.RemoverContato(comando.ContatoId);
+            _clienteRepository.RemoverContato(contato.Id);
+
+            return await _clienteRepository.UnitOfWork.Commit();
+        }
+
+        public async Task<bool> Handle(ComandoAtualizarCliente comando, CancellationToken cancellationToken)
+        {
+            if (!ValidarComando(comando))
+            {
+                return false;
+            }
+
+            var cliente = await _cadastroQueries.ObterCliente(comando.ClienteId);
+
+            if(cliente == null)
+            {
+                return false;
+            }
+
+            cliente.AlterarNome(comando.Nome);
+            cliente.AlterarSobrenome(comando.Sobrenome);
+            cliente.AlterarCpf(comando.Cpf);
+            cliente.AlterarSexo((Sexo)comando.Sexo);
+
+            _clienteRepository.AtualizarCliente(cliente);
+
+            return await _clienteRepository.UnitOfWork.Commit();
+        }
+
+        public async Task<bool> Handle(ComandoAtualizarContato comando, CancellationToken cancellationToken)
+        {
+            if (!ValidarComando(comando))
+            {
+                return false;
+            }
+
+            var contato = await _cadastroQueries.ObterContatoPorClienteId(comando.ClienteId);
+
+            if (contato == null)
+            {
+                return false;
+            }
+
+            contato.AlterarDdd(comando.Ddd);
+            contato.AlterarTelefone(comando.Telefone);
+            contato.AlterarEmail(comando.Email);
+
+            _clienteRepository.AtualizarContato(contato);
 
             return await _clienteRepository.UnitOfWork.Commit();
         }

@@ -6,11 +6,11 @@ namespace CQRS.Cadastro.Application.Commands
 {
     public class ComandoRemoverContato : Comando
     {
-        public Guid ContatoId { get; private set; }
+        public Guid ClienteId { get; private set; }
 
-        public ComandoRemoverContato(Guid contatoId)
+        public ComandoRemoverContato(Guid clienteId)
         {
-            ContatoId = contatoId;
+            ClienteId = clienteId;
         }
 
         public override bool EhValido()
@@ -23,9 +23,9 @@ namespace CQRS.Cadastro.Application.Commands
         {
             public ValidacaoRemoverContato()
             {
-                RuleFor(comando => comando.ContatoId)
+                RuleFor(comando => comando.ClienteId)
                     .NotEqual(Guid.Empty)
-                    .WithMessage("O id do contato não foi informado");
+                    .WithMessage("O id do cliente não foi informado");
             }
         }
     }

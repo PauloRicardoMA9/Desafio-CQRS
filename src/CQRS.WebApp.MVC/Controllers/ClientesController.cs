@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using CQRS.Cadastro.Application.Commands;
 using CQRS.Cadastro.Application.Queries;
 using CQRS.Cadastro.Application.ViewModels;
@@ -17,20 +18,24 @@ namespace CQRS.WebApp.MVC.Controllers
     {
         private readonly IMediatorHandler _mediatorHandler;
         private readonly ICadastroQueries _cadastroQueries;
+        private readonly IMapper _mapper;
 
         public ClientesController(IMediatorHandler mediatorHandler,
                                   INotificationHandler<NotificacaoDeDominio> notificacoes,
-                                  ICadastroQueries cadastroQueries) : base(notificacoes, mediatorHandler)
+                                  ICadastroQueries cadastroQueries,
+                                  IMapper mapper) : base(notificacoes, mediatorHandler)
         {
             _mediatorHandler = mediatorHandler;
             _cadastroQueries = cadastroQueries;
+            _mapper = mapper;
         }
 
         [HttpGet]
         [Route("index")]
         public async Task<ActionResult<IList<ClienteViewModel>>> IndexClientes()
         {
-            var clientesViewModel = await _cadastroQueries.ObterClientes();
+            var clientes = await _cadastroQueries.ObterClientes();
+            var clientesViewModel = _mapper.Map<IList<ClienteViewModel>>(clientes);
 
             if (OperacaoValida())
             {
@@ -44,7 +49,8 @@ namespace CQRS.WebApp.MVC.Controllers
         [Route("contatos/index")]
         public async Task<ActionResult<IList<ContatoViewModel>>> IndexContatos()
         {
-            var contatosViewModel = await _cadastroQueries.ObterContatos();
+            var contatos = await _cadastroQueries.ObterContatos();
+            var contatosViewModel = _mapper.Map<IList<ContatoViewModel>>(contatos);
 
             if (OperacaoValida())
             {
@@ -58,7 +64,8 @@ namespace CQRS.WebApp.MVC.Controllers
         [Route("busca/{clienteId:guid}")]
         public async Task<ActionResult<ClienteViewModel>> ObterClienteComContatoPorId(Guid clienteId)
         {
-            var clienteViewModel = await _cadastroQueries.ObterClienteComContatoPorId(clienteId);
+            var cliente = await _cadastroQueries.ObterClienteComContatoPorId(clienteId);
+            var clienteViewModel = _mapper.Map<ClienteViewModel>(cliente);
 
             if (OperacaoValida())
             {
@@ -88,7 +95,6 @@ namespace CQRS.WebApp.MVC.Controllers
             if (cliente.Contato != null)
             {
                 await AdicionarContato(cliente.Contato, cliente.Id);
-                
             }
 
             if (OperacaoValida())
@@ -124,11 +130,11 @@ namespace CQRS.WebApp.MVC.Controllers
             return BadRequest(ObterMensagensErro());
         }
 
-        [HttpDelete("{id:guid}")]
-        [Route("remover/{id:guid}")]
-        public async Task<IActionResult> RemoverCliente(Guid id)
+        [HttpDelete("{clienteId:guid}")]
+        [Route("remover/{clienteId:guid}")]
+        public async Task<IActionResult> RemoverCliente(Guid clienteId)
         {
-            var comandoRemCliente = new ComandoRemoverCliente(id);
+            var comandoRemCliente = new ComandoRemoverCliente(clienteId);
             await _mediatorHandler.EnviarComando(comandoRemCliente);
 
             if (OperacaoValida())
@@ -139,12 +145,57 @@ namespace CQRS.WebApp.MVC.Controllers
             return BadRequest(ObterMensagensErro());
         }
 
-        [HttpDelete("{id:guid}")]
-        [Route("contato/remover/{id:guid}")]
-        public async Task<IActionResult> RemoverContato(Guid id)
+        [HttpDelete("{clienteId:guid}")]
+        [Route("contato/remover/{clienteId:guid}")]
+        public async Task<IActionResult> RemoverContatoPorClienteId(Guid clienteId)
         {
-            var comandoRemContato = new ComandoRemoverContato(id);
+            var comandoRemContato = new ComandoRemoverContato(clienteId);
             await _mediatorHandler.EnviarComando(comandoRemContato);
+
+            if (OperacaoValida())
+            {
+                return NoContent();
+            }
+
+            return BadRequest(ObterMensagensErro());
+        }
+
+        [HttpPost("{clienteId:guid}")]
+        [Route("atualizar/{clienteId:guid}")]
+        public async Task<IActionResult> AtualizarCliente(ClienteViewModel clienteViewModel, Guid clienteId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            if (clienteViewModel.Contato != null)
+            {
+                await AtualizarContatoPorClienteId(clienteViewModel.Contato, clienteId);
+            }
+
+            if (!OperacaoValida())
+            {
+                return BadRequest(ObterMensagensErro());
+            }
+
+            var comandoAttCliente = new ComandoAtualizarCliente(clienteId, clienteViewModel.Nome, clienteViewModel.Sobrenome, clienteViewModel.Cpf, clienteViewModel.Sexo);
+            await _mediatorHandler.EnviarComando(comandoAttCliente);
+
+            if (OperacaoValida())
+            {
+                return NoContent();
+            }
+
+            return BadRequest(ObterMensagensErro());
+        }
+
+        [HttpPost("{clienteId:guid}")]
+        [Route("contato/atualizar/{clienteId:guid}")]
+        public async Task<IActionResult> AtualizarContatoPorClienteId(ContatoViewModel contatoViewModel, Guid clienteId)
+        {
+            var comandoAttContato = new ComandoAtualizarContato(clienteId, contatoViewModel.Ddd, contatoViewModel.Telefone, contatoViewModel.Email);
+            await _mediatorHandler.EnviarComando(comandoAttContato);
 
             if (OperacaoValida())
             {

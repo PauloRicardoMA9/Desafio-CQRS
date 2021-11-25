@@ -1,6 +1,5 @@
-﻿using AutoMapper;
-using CQRS.Cadastro.Application.ViewModels;
-using CQRS.Cadastro.Domain.Interfaces;
+﻿using CQRS.Cadastro.Domain.Interfaces;
+using CQRS.Cadastro.Domain.Objects;
 using CQRS.Core.Communication.Mediator;
 using CQRS.Core.Messages.CommonMessages.Notifications;
 using System;
@@ -12,19 +11,16 @@ namespace CQRS.Cadastro.Application.Queries
     public class CadastroQueries : ICadastroQueries
     {
         private readonly IClienteRepository _clienteRepository;
-        private readonly IMapper _mapper;
         private readonly IMediatorHandler _mediatorHandler;
 
         public CadastroQueries(IClienteRepository clienteRepository,
-                               IMapper mapper,
                                IMediatorHandler mediatorHandler)
         {
             _clienteRepository = clienteRepository;
-            _mapper = mapper;
             _mediatorHandler = mediatorHandler;
         }
 
-        public async Task<IList<ClienteViewModel>> ObterClientes()
+        public async Task<IList<Cliente>> ObterClientes()
         {
             var clientes = await _clienteRepository.ObterTodosClientes();
 
@@ -34,11 +30,10 @@ namespace CQRS.Cadastro.Application.Queries
                 return null;
             }
 
-            var clientesViewModel = _mapper.Map<IList<ClienteViewModel>>(clientes);
-            return clientesViewModel;
+            return clientes;
         }
 
-        public async Task<IList<ContatoViewModel>> ObterContatos()
+        public async Task<IList<Contato>> ObterContatos()
         {
             var contatos = await _clienteRepository.ObterTodosContatos();
 
@@ -48,30 +43,52 @@ namespace CQRS.Cadastro.Application.Queries
                 return null;
             }
 
-            var contatosViewModel = _mapper.Map<IList<ContatoViewModel>>(contatos);
-            return contatosViewModel;
+            return contatos;
         }
 
-        public async Task<ClienteViewModel> ObterClienteComContatoPorId(Guid clienteId)
+        public async Task<Cliente> ObterCliente(Guid clienteId)
+        {
+            var cliente = await _clienteRepository.ObterClientePorId(clienteId);
+
+            if (cliente == null)
+            {
+                await _mediatorHandler.PublicarNotificacao(new NotificacaoDeDominio("ObterClienteQuerie", "Nenhum cliente cadastrado com o id informado."));
+                return null;
+            }
+
+            return cliente;
+        }
+
+        public async Task<Contato> ObterContatoPorClienteId(Guid clienteId)
+        {
+            var contato = _clienteRepository.ObterContatoPorClienteId(contato => contato.ClienteId == clienteId);
+
+            if (contato == null)
+            {
+                await _mediatorHandler.PublicarNotificacao(new NotificacaoDeDominio("ObterContatoPorClienteIdQuerie", "Nenhum contato cadastrado cujo cliente possua o id informado."));
+                return null;
+            }
+
+            return contato;
+        }
+
+        public async Task<Cliente> ObterClienteComContatoPorId(Guid clienteId)
         {
             var cliente = await _clienteRepository.ObterClientePorId(clienteId);            
             var contato = _clienteRepository.ObterContatoPorClienteId(contato => contato.ClienteId == clienteId);
 
             if (cliente == null)
             {
-                await _mediatorHandler.PublicarNotificacao(new NotificacaoDeDominio("ObterClienteComContatoPorIdQuerie", "Nenhum cliente cadastrado com o id informado."));
+                await _mediatorHandler.PublicarNotificacao(new NotificacaoDeDominio("ObterClienteQuerie", "Nenhum cliente cadastrado com o id informado."));
                 return null;
             }
 
-            var clienteViewModel = _mapper.Map<ClienteViewModel>(cliente);
-
             if (contato != null)
             {
-                var contatoViewModel = _mapper.Map<ContatoViewModel>(contato);
-                clienteViewModel.Contato = contatoViewModel;
+                cliente.AlterarContato(contato);
             }
 
-            return clienteViewModel;
+            return cliente;
         }
     }
 }

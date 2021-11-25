@@ -1,4 +1,4 @@
-﻿using CQRS.Cadastro.Application.ViewModels;
+﻿using CQRS.Cadastro.Domain.Objects;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,8 +7,10 @@ namespace CQRS.Cadastro.Application.Queries
 {
     public interface ICadastroQueries
     {
-        public Task<IList<ClienteViewModel>> ObterClientes();
-        public Task<IList<ContatoViewModel>> ObterContatos();
-        public Task<ClienteViewModel> ObterClienteComContatoPorId(Guid clienteId);
+        public Task<IList<Cliente>> ObterClientes();
+        public Task<IList<Contato>> ObterContatos();
+        public Task<Cliente> ObterCliente(Guid clienteId);
+        public Task<Contato> ObterContatoPorClienteId(Guid clienteId);
+        public Task<Cliente> ObterClienteComContatoPorId(Guid clienteId);
     }
 }
