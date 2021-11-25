@@ -1,5 +1,6 @@
 ﻿using CQRS.Core.DomainObjects;
 using DocumentValidator;
+using System;
 
 namespace CQRS.Cadastro.Domain.Objects
 {
@@ -13,8 +14,9 @@ namespace CQRS.Cadastro.Domain.Objects
 
         protected Cliente() { }
 
-        public Cliente(string nome, string sobrenome, string cpf, Sexo sexo, Contato contato)
+        public Cliente(Guid id, string nome, string sobrenome, string cpf, Sexo sexo, Contato contato)
         {
+            Id = id;
             Nome = nome;
             Sobrenome = sobrenome;
             Cpf = cpf;

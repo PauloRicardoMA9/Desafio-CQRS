@@ -7,7 +7,7 @@ namespace CQRS.Cadastro.Application.Commands
 {
     public class ComandoAdicionarCliente : Comando
     {
-        public Guid ClienteId { get; set; }
+        public Guid ClienteId { get; private set; }
         public string Nome { get; private set; }
         public string Sobrenome { get; private set; }
         public string Cpf { get; private set; }
@@ -15,7 +15,6 @@ namespace CQRS.Cadastro.Application.Commands
 
         public ComandoAdicionarCliente(Guid clienteId, string nome, string sobrenome, string cpf, int sexo)
         {
-            AggregateId = clienteId;
             ClienteId = clienteId;
             Nome = nome;
             Sobrenome = sobrenome;
@@ -36,7 +35,7 @@ namespace CQRS.Cadastro.Application.Commands
         {
             RuleFor(comando => comando.ClienteId)
                 .NotEqual(Guid.Empty)
-                .WithMessage("Id do cliente inválido");
+                .WithMessage("O id do cliente não foi informado");
 
             RuleFor(comando => comando.Nome)
                 .NotEmpty()

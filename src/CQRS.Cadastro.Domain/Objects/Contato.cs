@@ -13,13 +13,12 @@ namespace CQRS.Cadastro.Domain.Objects
 
         protected Contato() { }
 
-        public Contato(int ddd, int telefone, string email, Cliente cliente)
+        public Contato(Guid clienteId, int ddd, int telefone, string email)
         {
+            ClienteId = clienteId;
             Ddd = ddd;
             Telefone = telefone;
             Email = email;
-            Cliente = cliente;
-            ClienteId = cliente.Id;
 
             Validar();
         }
@@ -55,7 +54,6 @@ namespace CQRS.Cadastro.Domain.Objects
             Validacoes.ValidarTamanho(Ddd, 2, 2, "O campo DDD deve conter 3 dígitos.");
             Validacoes.ValidarTamanho(Telefone, 9, 9, "O campo Número deve conter 9 dígitos.");
             Validacoes.ValidarSeNaoVazio(Email, "O campo Email não pode estar vazio.");
-            Validacoes.ValidarSeNaoNulo(Cliente, "O Cliente não pode ser nulo.");
             Validacoes.ValidarSeNaoNulo(ClienteId, "O ClienteId não pode ser nulo.");
         }
     }

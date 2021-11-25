@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CQRS.Core.Extensions;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace CQRS.Cadastro.Application.ViewModels
@@ -11,11 +12,11 @@ namespace CQRS.Cadastro.Application.ViewModels
         public Guid ClienteId { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        [StringLength(2, ErrorMessage = "O campo {0} precisa ter {1} caracteres", MinimumLength = 2)]
+        [IntLenght(2, 2, ErrorMessage = "O campo {0} deve conter {1} dígitos.")]
         public int Ddd { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        [StringLength(9, ErrorMessage = "O campo {0} precisa ter {1} caracteres", MinimumLength = 9)]
+        [IntLenght(9, 9, ErrorMessage = "O campo {0} deve conter {1} dígitos.")]
         public int Telefone { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]

@@ -1,4 +1,5 @@
 ﻿using CQRS.Cadastro.Domain.Interfaces;
+using CQRS.Cadastro.Domain.Objects;
 using CQRS.Core.Data;
 
 namespace CQRS.Cadastro.Data.Repository
@@ -14,9 +15,15 @@ namespace CQRS.Cadastro.Data.Repository
 
         public IUnitOfWork UnitOfWork => _context;
 
+        public void Adicionar(Cliente cliente)
+        {
+            _context.Clientes.Add(cliente);
+        }
 
-
-
+        public void Adicionar(Contato contato)
+        {
+            _context.Contatos.Add(contato);
+        }
 
         public void Dispose()
         {

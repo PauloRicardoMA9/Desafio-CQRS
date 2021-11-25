@@ -1,5 +1,7 @@
 ﻿using CQRS.Cadastro.Application.Commands;
 using CQRS.Cadastro.Data;
+using CQRS.Cadastro.Data.Repository;
+using CQRS.Cadastro.Domain.Interfaces;
 using CQRS.Core.Communication.Mediator;
 using CQRS.Core.Messages.CommonMessages.Notifications;
 using MediatR;
@@ -19,6 +21,8 @@ namespace CQRS.WebApp.MVC.Setup
 
             // Cadastro
             services.AddScoped<IRequestHandler<ComandoAdicionarCliente, bool>, CadastroCommandHandler>();
+            services.AddScoped<IRequestHandler<ComandoAdicionarContato, bool>, CadastroCommandHandler>();
+            services.AddScoped<IClienteRepository, ClienteRepository>();
             services.AddScoped<CadastroContext>();
         }
     }
