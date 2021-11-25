@@ -12,7 +12,7 @@ namespace CQRS.Cadastro.Domain.Objects
         public Sexo Sexo { get; private set; }
         public Contato Contato { get; private set; }
 
-        protected Cliente() { }
+        public Cliente() { }
 
         public Cliente(Guid id, string nome, string sobrenome, string cpf, Sexo sexo, Contato contato)
         {

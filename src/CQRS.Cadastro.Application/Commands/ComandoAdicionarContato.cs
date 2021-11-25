@@ -6,13 +6,15 @@ namespace CQRS.Cadastro.Application.Commands
 {
     public class ComandoAdicionarContato : Comando
     {
+        public Guid ContatoId { get; private set; }
         public Guid ClienteId { get; private set; }
         public int Ddd { get; private set; }
         public int Telefone { get; private set; }
         public string Email { get; private set; }
 
-        public ComandoAdicionarContato(Guid clienteId, int ddd, int telefone, string email)
+        public ComandoAdicionarContato(Guid id, Guid clienteId, int ddd, int telefone, string email)
         {
+            ContatoId = id;
             ClienteId = clienteId;
             Ddd = ddd;
             Telefone = telefone;
@@ -30,6 +32,10 @@ namespace CQRS.Cadastro.Application.Commands
     {
         public ValidacaoAdicionarContato()
         {
+            RuleFor(comando => comando.ContatoId)
+                .NotEqual(Guid.Empty)
+                .WithMessage("O id do contato não foi informado");
+
             RuleFor(comando => comando.ClienteId)
                 .NotEqual(Guid.Empty)
                 .WithMessage("O id do cliente não foi informado");

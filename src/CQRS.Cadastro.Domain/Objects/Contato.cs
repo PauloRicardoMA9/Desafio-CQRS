@@ -11,10 +11,11 @@ namespace CQRS.Cadastro.Domain.Objects
         public string Email { get; private set; }
         public Cliente Cliente { get; private set; }
 
-        protected Contato() { }
+        public Contato() { }
 
-        public Contato(Guid clienteId, int ddd, int telefone, string email)
+        public Contato(Guid id, Guid clienteId, int ddd, int telefone, string email)
         {
+            Id = id;
             ClienteId = clienteId;
             Ddd = ddd;
             Telefone = telefone;

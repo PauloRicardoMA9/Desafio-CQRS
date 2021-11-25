@@ -22,6 +22,8 @@ namespace CQRS.WebApp.MVC.Setup
             // Cadastro
             services.AddScoped<IRequestHandler<ComandoAdicionarCliente, bool>, CadastroCommandHandler>();
             services.AddScoped<IRequestHandler<ComandoAdicionarContato, bool>, CadastroCommandHandler>();
+            services.AddScoped<IRequestHandler<ComandoRemoverCliente, bool>, CadastroCommandHandler>();
+            services.AddScoped<IRequestHandler<ComandoRemoverContato, bool>, CadastroCommandHandler>();
             services.AddScoped<IClienteRepository, ClienteRepository>();
             services.AddScoped<CadastroContext>();
         }
