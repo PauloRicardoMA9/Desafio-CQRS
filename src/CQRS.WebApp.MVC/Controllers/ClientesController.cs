@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CQRS.Cadastro.Application.Commands;
+using CQRS.Cadastro.Application.Queries;
 using CQRS.Cadastro.Application.ViewModels;
 using CQRS.Core.Communication.Mediator;
 using CQRS.Core.Messages.CommonMessages.Notifications;
@@ -14,11 +16,56 @@ namespace CQRS.WebApp.MVC.Controllers
     public class ClientesController : ControllerBase
     {
         private readonly IMediatorHandler _mediatorHandler;
+        private readonly ICadastroQueries _cadastroQueries;
 
         public ClientesController(IMediatorHandler mediatorHandler,
-                                  INotificationHandler<NotificacaoDeDominio> notificacoes) : base(notificacoes, mediatorHandler)
+                                  INotificationHandler<NotificacaoDeDominio> notificacoes,
+                                  ICadastroQueries cadastroQueries) : base(notificacoes, mediatorHandler)
         {
             _mediatorHandler = mediatorHandler;
+            _cadastroQueries = cadastroQueries;
+        }
+
+        [HttpGet]
+        [Route("index")]
+        public async Task<ActionResult<IList<ClienteViewModel>>> IndexClientes()
+        {
+            var clientesViewModel = await _cadastroQueries.ObterClientes();
+
+            if (OperacaoValida())
+            {
+                return Ok(clientesViewModel);
+            }
+
+            return NotFound(ObterMensagensErro());
+        }
+
+        [HttpGet]
+        [Route("contatos/index")]
+        public async Task<ActionResult<IList<ContatoViewModel>>> IndexContatos()
+        {
+            var contatosViewModel = await _cadastroQueries.ObterContatos();
+
+            if (OperacaoValida())
+            {
+                return Ok(contatosViewModel);
+            }
+
+            return NotFound(ObterMensagensErro());
+        }
+
+        [HttpGet("{clienteId:guid}")]
+        [Route("busca/{clienteId:guid}")]
+        public async Task<ActionResult<ClienteViewModel>> ObterClienteComContatoPorId(Guid clienteId)
+        {
+            var clienteViewModel = await _cadastroQueries.ObterClienteComContatoPorId(clienteId);
+
+            if (OperacaoValida())
+            {
+                return Ok(clienteViewModel);
+            }
+
+            return NotFound(ObterMensagensErro());
         }
 
         [HttpPost] 

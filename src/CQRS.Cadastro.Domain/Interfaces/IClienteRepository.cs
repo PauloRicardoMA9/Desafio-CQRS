@@ -11,8 +11,13 @@ namespace CQRS.Cadastro.Domain.Interfaces
     {
         void Adicionar(Cliente cliente);
         void Adicionar(Contato contato);
-        public Task<IEnumerable<Cliente>> BuscarCliente(Expression<Func<Cliente, bool>> predicate);
-        public Task<IEnumerable<Contato>> BuscarContato(Expression<Func<Contato, bool>> predicate);
+        public Task<IList<Cliente>> BuscarCliente(Expression<Func<Cliente, bool>> predicate);
+        public Task<IList<Contato>> BuscarContato(Expression<Func<Contato, bool>> predicate);
+        public Task<IList<Cliente>> ObterTodosClientes();
+        public Task<IList<Contato>> ObterTodosContatos();
+        public Task<Cliente> ObterClientePorId(Guid id);
+        public Task<Contato> ObterContatoPorId(Guid id);
+        public Contato ObterContatoPorClienteId(Expression<Func<Contato, bool>> predicate);
         public void RemoverCliente(Guid id);
         public void RemoverContato(Guid id);
     }

@@ -1,4 +1,5 @@
 ﻿using CQRS.Cadastro.Application.Commands;
+using CQRS.Cadastro.Application.Queries;
 using CQRS.Cadastro.Data;
 using CQRS.Cadastro.Data.Repository;
 using CQRS.Cadastro.Domain.Interfaces;
@@ -24,6 +25,7 @@ namespace CQRS.WebApp.MVC.Setup
             services.AddScoped<IRequestHandler<ComandoAdicionarContato, bool>, CadastroCommandHandler>();
             services.AddScoped<IRequestHandler<ComandoRemoverCliente, bool>, CadastroCommandHandler>();
             services.AddScoped<IRequestHandler<ComandoRemoverContato, bool>, CadastroCommandHandler>();
+            services.AddScoped<ICadastroQueries, CadastroQueries>();
             services.AddScoped<IClienteRepository, ClienteRepository>();
             services.AddScoped<CadastroContext>();
         }

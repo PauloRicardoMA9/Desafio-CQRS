@@ -31,14 +31,39 @@ namespace CQRS.Cadastro.Data.Repository
             _context.Contatos.Add(contato);
         }
 
-        public async Task<IEnumerable<Cliente>> BuscarCliente(Expression<Func<Cliente, bool>> predicate)
+        public async Task<IList<Cliente>> BuscarCliente(Expression<Func<Cliente, bool>> predicate)
         {
             return await _context.Clientes.AsNoTracking().Where(predicate).ToListAsync();
         }
 
-        public async Task<IEnumerable<Contato>> BuscarContato(Expression<Func<Contato, bool>> predicate)
+        public async Task<IList<Contato>> BuscarContato(Expression<Func<Contato, bool>> predicate)
         {
             return await _context.Contatos.AsNoTracking().Where(predicate).ToListAsync();
+        }
+
+        public async Task<IList<Cliente>> ObterTodosClientes()
+        {
+            return await _context.Clientes.AsNoTracking().ToListAsync();
+        }
+
+        public async Task<IList<Contato>> ObterTodosContatos()
+        {
+            return await _context.Contatos.AsNoTracking().ToListAsync();
+        }
+
+        public async Task<Cliente> ObterClientePorId(Guid id)
+        {
+            return await _context.Clientes.FindAsync(id);
+        }
+
+        public async Task<Contato> ObterContatoPorId(Guid id)
+        {
+            return await _context.Contatos.FindAsync(id);
+        }
+
+        public Contato ObterContatoPorClienteId(Expression<Func<Contato, bool>> predicate)
+        {
+            return _context.Contatos.AsNoTracking().Where(predicate).FirstOrDefault();
         }
 
         public void RemoverCliente(Guid id)
