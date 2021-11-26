@@ -160,7 +160,7 @@ namespace CQRS.WebApp.MVC.Controllers
             return BadRequest(ObterMensagensErro());
         }
 
-        [HttpPost("{clienteId:guid}")]
+        [HttpPut("{clienteId:guid}")]
         [Route("atualizar/{clienteId:guid}")]
         public async Task<IActionResult> AtualizarCliente(ClienteViewModel clienteViewModel, Guid clienteId)
         {
@@ -190,7 +190,7 @@ namespace CQRS.WebApp.MVC.Controllers
             return BadRequest(ObterMensagensErro());
         }
 
-        [HttpPost("{clienteId:guid}")]
+        [HttpPut("{clienteId:guid}")]
         [Route("contato/atualizar/{clienteId:guid}")]
         public async Task<IActionResult> AtualizarContatoPorClienteId(ContatoViewModel contatoViewModel, Guid clienteId)
         {

@@ -51,9 +51,9 @@ namespace CQRS.Cadastro.Application.Commands
                 return false;
             }
 
-            var clienteCadastrado = _clienteRepository.BuscarCliente(cliente => cliente.Id == comando.ClienteId).Result.Any();
+            var clienteCadastrado = await _clienteRepository.BuscarCliente(cliente => cliente.Id == comando.ClienteId);
 
-            if (!clienteCadastrado)
+            if (!clienteCadastrado.Any())
             {
                 await _mediatorHandler.PublicarNotificacao(new NotificacaoDeDominio(comando.TipoDaMensagem, "Nenhum cliente cadastrado com o id informado."));
                 return false;
@@ -72,9 +72,9 @@ namespace CQRS.Cadastro.Application.Commands
                 return false;
             }
 
-            var clienteCadastrado = _clienteRepository.BuscarCliente(cliente => cliente.Id == comando.ClienteId).Result.Any();
+            var clienteCadastrado = await _clienteRepository.BuscarCliente(cliente => cliente.Id == comando.ClienteId);
 
-            if (!clienteCadastrado)
+            if (!clienteCadastrado.Any())
             {
                 await _mediatorHandler.PublicarNotificacao(new NotificacaoDeDominio(comando.TipoDaMensagem, "Nenhum cliente cadastrado com o id informado."));
                 return false;
